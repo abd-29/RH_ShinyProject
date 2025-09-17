@@ -1,39 +1,68 @@
 ############################################################
-################### FRONT-END ##############################
+################### INTERFACE UTILISATEUR #################
 ############################################################
 
-# Page principale (UI)
+
 ui <- navbarPage(
+  "RH Pay Insights",
   
-  "RH Pay Insights",                                                                           # Titre du site
-  
+  # la page d'accueil
   tabPanel(
-    "Accueil",                                                                                 # la page d'accueil
+    
+    "Accueil",
     
     fluidPage(
       
-      br(),                                                                                     # saut de ligne 
-      h1("Bienvenue — Analyse des rémunérations RH"),                                           # titre du site 
+      # Titre principal
+      titlePanel("Bienvenue dans l'Analyse des rémunérations RH"),
+      
+      # Texte d’introduction
       p("Ce site s'inscrit dans le cadre d'un projet universitaire. 
-         Il permet d'explorer les salaires, comparer les groupes et exporter des résultats."),  # un simple paragraphe
+        Il permet d'explorer les salaires, comparer les groupes et exporter des résultats."),
       
-      # Boutons (pas encore branchés)
-      div(
-        actionButton("btn_commencer", "Commencer", class = "btn-primary"),                     # bouton commencer
-        actionButton("btn_methodo", "Voir la méthodologie", class = "ms-2")                    # bouton Voir la méthodologie
-      ),
-      
-      br(),
-      
-      # on ménage des espaces à remplir dans le futur
+      # Boutons 
       fluidRow(
-        column(4, wellPanel(h4("Effectif total"),   h2("—"))),
-        column(4, wellPanel(h4("% CDI"),            h2("—"))),
-        column(4, wellPanel(h4("Salaire médian"),   h2("—")))
+        column(6, actionButton("btn_commencer", "Commencer")),
+        column(6, actionButton("btn_methodo", "Voir la méthodologie"))
       ),
       
-      br(),
-      # tags$small("Périmètre : à définir • Données : RH_Contrats.xlsx — RH_Salaries.xlsx • Version 0.1")  # un simple footer, mais on verra
+      br(), # saut de ligne 
+      
+      #ctrois indicateurs 
+      fluidRow(
+        column(
+          4,
+          wellPanel(
+            strong("Nombre de salariés"),
+            textOutput("indicateur_salaries")
+          )
+        ),
+        column(
+          4,
+          wellPanel(
+            strong("Part des CDI"),
+            textOutput("indicateur_cdi")
+          )
+        ),
+        column(
+          4,
+          wellPanel(
+            strong("Salaire médian"),
+            textOutput("indicateur_salaire")
+          )
+        )
+      ),
+      
+      #br(),
+      #helpText("Périmètre : à définir • Données : RH_Contrats.xlsx et RH_Salaries.xlsx • Version 0.1")
     )
-  )
+  ),
+  
+  # Creation des autres onglets mais vide pour le moment
+  tabPanel("Explorer", fluidPage(h3("À venir"))),
+  tabPanel("Comparer", fluidPage(h3("À venir"))),
+  tabPanel("Contrats", fluidPage(h3("À venir"))),
+  tabPanel("Population", fluidPage(h3("À venir"))),
+  tabPanel("Exports", fluidPage(h3("À venir"))),
+  tabPanel("À propos", fluidPage(h3("À venir")))
 )
