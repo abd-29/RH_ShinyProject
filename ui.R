@@ -20,7 +20,7 @@ ui <- navbarPage(
       fluidRow(
         # ---- Colonne gauche : texte + 3 indicateurs ----
         column(
-          width = 8,
+          width = 6,
           
           # Boutons (placeholders)
           fluidRow(
@@ -53,21 +53,42 @@ ui <- navbarPage(
           ),
           
           br(),
-          helpText("Périmètre : à définir • Données : RH_Contrats.xlsx et RH_Salaries.xlsx • Version 0.1")
+          helpText("Données : RH_Contrats.xlsx et RH_Salaries.xlsx")
         ),
         
         # ---- Colonne droite : deux graphiques superposés ----
         column(
-          width = 4,
+          width = 6,
           
-          wellPanel(
-            strong("Distribution des salaires"),
-            plotOutput("plot_histo_salaire", height = 260)
+          # Ligne 1 : premier graphique
+          fluidRow(
+            column(
+              12,
+              wellPanel(
+                style = "background-color: white;",   # fond blanc
+                strong("Distribution des salaires"),
+                plotOutput("plot_histo_salaire", height = 200)
+              )
+            )
           ),
           
-          wellPanel(
-            strong("Répartition des contrats"),
-            plotOutput("plot_bar_contrat", height = 260)
+          # Ligne 2 : deuxième graphique
+          fluidRow(
+            column(
+              12,
+              wellPanel(
+                style = "background-color: white;",   # fond blanc
+                strong("Répartition des contrats"),
+                plotOutput("plot_bar_contrat", height = 200)
+              )
+            )
+          ),
+          
+          # Ligne 3 : vide (place réservée)
+          fluidRow(
+            column(
+              12
+            )
           )
         )
       )

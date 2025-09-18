@@ -45,7 +45,9 @@ server <- function(input, output, session)
         breaks = 30,            # nombre de classes
         main   = "Salaires (brut) - histogramme",
         xlab   = "Salaire",
-        ylab   = "Effectif"
+        ylab   = "Effectif",
+        col = "skyblue",
+        border = "white"
       )
     })
     
@@ -64,7 +66,9 @@ server <- function(input, output, session)
         main = "Nombre de contrats par type",
         xlab = "Type de contrat",
         ylab = "Effectif",
-        las  = 2                # étiquettes verticales si besoin
+        las  = 2,                # étiquettes verticales si besoin
+        col = "skyblue",
+        border ="white"
       )
     })
     
