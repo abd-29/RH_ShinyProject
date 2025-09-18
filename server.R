@@ -44,7 +44,10 @@ server <- function(input, output, session)
         x    = ~Salaire,
         type = "histogram",
         nbinsx = 30,
-        marker = list(color = "skyblue", line = list(color = "white", width = 1))
+        marker = list(
+          color = "skyblue",        # barres bleu ciel
+          line  = list(color = "transparent") # pas de bordure
+        )
       ) |>
         layout(
           title = "",
@@ -69,7 +72,10 @@ server <- function(input, output, session)
         x    = ~Contrat,
         y    = ~Effectif,
         type = "bar",
-        marker = list(color = "skyblue", line = list(color = "white", width = 1))
+        marker = list(
+          color = "skyblue",        # barres bleu ciel
+          line  = list(color = "transparent") # pas de bordure
+        )
       ) |>
         layout(
           title = "",

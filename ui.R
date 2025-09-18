@@ -10,17 +10,17 @@ ui <- navbarPage(
   tabPanel(
     "Accueil",
     fluidPage(
-      titlePanel("Bienvenue — Analyse des rémunérations RH"),
-      
-      # Intro
-      p("Ce site s'inscrit dans le cadre d'un projet universitaire. 
-      Il permet d'explorer les salaires, comparer les groupes et exporter des résultats."),
+      titlePanel("Analyse des rémunérations RH"),
       
       # ======= MISE EN PAGE : GAUCHE (texte + indicateurs) / DROITE (graphiques) =======
       fluidRow(
         # ---- Colonne gauche : texte + 3 indicateurs ----
         column(
           width = 6,
+          
+          # Intro
+          p("Ce site s'inscrit dans le cadre d'un projet universitaire. 
+      Il permet d'explorer les salaires, comparer les groupes et exporter des résultats."),
           
           # Boutons (placeholders)
           fluidRow(
