@@ -8,53 +8,69 @@ ui <- navbarPage(
   
   # la page d'accueil
   tabPanel(
-    
     "Accueil",
-    
     fluidPage(
+      titlePanel("Bienvenue — Analyse des rémunérations RH"),
       
-      # Titre principal
-      titlePanel("Bienvenue dans l'Analyse des rémunérations RH"),
-      
-      # Texte d’introduction
+      # Intro
       p("Ce site s'inscrit dans le cadre d'un projet universitaire. 
-        Il permet d'explorer les salaires, comparer les groupes et exporter des résultats."),
+      Il permet d'explorer les salaires, comparer les groupes et exporter des résultats."),
       
-      # Boutons 
+      # ======= MISE EN PAGE : GAUCHE (texte + indicateurs) / DROITE (graphiques) =======
       fluidRow(
-        column(6, actionButton("btn_commencer", "Commencer")),
-        column(6, actionButton("btn_methodo", "Voir la méthodologie"))
-      ),
-      
-      br(), # saut de ligne 
-      
-      #trois indicateurs 
-      fluidRow(
+        # ---- Colonne gauche : texte + 3 indicateurs ----
         column(
-          4,
-          wellPanel(
-            strong("Nombre de salariés"),
-            textOutput("indicateur_salaries")
-          )
+          width = 8,
+          
+          # Boutons (placeholders)
+          fluidRow(
+            column(6, actionButton("btn_commencer", "Commencer")),
+            column(6, actionButton("btn_methodo", "Voir la méthodologie"))
+          ),
+          
+          br(),
+          
+          # Indicateurs (textOutput déjà définis côté serveur)
+          fluidRow(
+            column(
+              4, wellPanel(
+                strong("Nombre de salariés"),
+                textOutput("indicateur_salaries")
+              )
+            ),
+            column(
+              4, wellPanel(
+                strong("Part des CDI"),
+                textOutput("indicateur_cdi")
+              )
+            ),
+            column(
+              4, wellPanel(
+                strong("Salaire médian"),
+                textOutput("indicateur_salaire")
+              )
+            )
+          ),
+          
+          br(),
+          helpText("Périmètre : à définir • Données : RH_Contrats.xlsx et RH_Salaries.xlsx • Version 0.1")
         ),
+        
+        # ---- Colonne droite : deux graphiques superposés ----
         column(
-          4,
+          width = 4,
+          
           wellPanel(
-            strong("Part des CDI"),
-            textOutput("indicateur_cdi")
-          )
-        ),
-        column(
-          4,
+            strong("Distribution des salaires"),
+            plotOutput("plot_histo_salaire", height = 260)
+          ),
+          
           wellPanel(
-            strong("Salaire médian"),
-            textOutput("indicateur_salaire")
+            strong("Répartition des contrats"),
+            plotOutput("plot_bar_contrat", height = 260)
           )
         )
-      ),
-      
-      #br(),
-      #helpText("Périmètre : à définir • Données : RH_Contrats.xlsx et RH_Salaries.xlsx • Version 0.1")
+      )
     )
   ),
   

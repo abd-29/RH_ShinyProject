@@ -31,4 +31,42 @@ server <- function(input, output, session)
       }
     })
     
+    
+    
+    # ------------------------------------------------------
+    # Graphique 1 : histogramme des salaires
+    # ------------------------------------------------------
+    output$plot_histo_salaire <- renderPlot({
+      # Sécurité : vérifie l'existence de la colonne
+      req("Salaire" %in% names(salaires))
+      
+      hist(
+        salaires$Salaire,
+        breaks = 30,            # nombre de classes
+        main   = "Salaires (brut) - histogramme",
+        xlab   = "Salaire",
+        ylab   = "Effectif"
+      )
+    })
+    
+    # ------------------------------------------------------
+    # Graphique 2 : barres par type de contrat
+    # ------------------------------------------------------
+    output$plot_bar_contrat <- renderPlot({
+      # Sécurité : vérifie l'existence de la colonne
+      req("Contrat" %in% names(contrats))
+      
+      # Tableau de fréquences simple
+      tab <- sort(table(contrats$Contrat), decreasing = TRUE)
+      
+      barplot(
+        tab,
+        main = "Nombre de contrats par type",
+        xlab = "Type de contrat",
+        ylab = "Effectif",
+        las  = 2                # étiquettes verticales si besoin
+      )
+    })
+    
+    
 }
