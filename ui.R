@@ -44,24 +44,50 @@ ui <- navbarPage(
           
           br(),
           
-          # Indicateurs (textOutput déjà définis côté serveur)
+          # --- Indicateurs (version agrandie) ---
           fluidRow(
+            # Colonne gauche
             column(
-              4, wellPanel(
-                strong("Nombre de salariés"),
-                textOutput("indicateur_salaries")
+              width = 8,
+              style = "padding-right:6px;",   # réduit l’espace à droite
+              fluidRow(
+                column(
+                  12,
+                  wellPanel(
+                    style = "padding:12px; margin-bottom:6px; min-height:90px;",
+                    strong("Nombre de salariés"),
+                    div(style="font-size:1.2em;", textOutput("indicateur_salaries"))
+                  )
+                )
+              ),
+              fluidRow(
+                column(
+                  6,
+                  wellPanel(
+                    style = "padding:12px; margin-bottom:6px; min-height:90px;",
+                    strong("Part des CDI"),
+                    div(style="font-size:1.2em;", textOutput("indicateur_cdi"))
+                  )
+                ),
+                column(
+                  6,
+                  wellPanel(
+                    style = "padding:12px; margin-bottom:6px; min-height:90px;",
+                    strong("Salaire moyen"),
+                    div(style="font-size:1.2em;", textOutput("indicateur_salaire_moyen"))
+                  )
+                )
               )
             ),
+            
+            # Colonne droite
             column(
-              4, wellPanel(
-                strong("Part des CDI"),
-                textOutput("indicateur_cdi")
-              )
-            ),
-            column(
-              4, wellPanel(
+              width = 4,
+              style = "padding-left:6px;",    # réduit l’espace à gauche
+              wellPanel(
+                style = "padding:12px; margin-bottom:6px; min-height:190px;",
                 strong("Salaire médian"),
-                textOutput("indicateur_salaire")
+                div(style="font-size:1.4em;", textOutput("indicateur_salaire"))
               )
             )
           ),

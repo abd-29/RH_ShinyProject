@@ -31,6 +31,16 @@ server <- function(input, output, session)
       }
     })
     
+    # Salaire moyen (nouvel indicateur)
+    output$indicateur_salaire_moyen <- renderText({
+      if ("Salaire" %in% names(salaires)) {
+        moy <- mean(salaires$Salaire, na.rm = TRUE)
+        paste(format(round(moy), big.mark = " ", scientific = FALSE), "€")
+      } else {
+        "Non disponible"
+      }
+    })
+    
     
     
     # ------------------------------------------------------
