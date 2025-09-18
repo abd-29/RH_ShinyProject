@@ -36,40 +36,46 @@ server <- function(input, output, session)
     # ------------------------------------------------------
     # Graphique 1 : histogramme des salaires
     # ------------------------------------------------------
-    output$plot_histo_salaire <- renderPlot({
-      # Sécurité : vérifie l'existence de la colonne
+    output$plot_histo_salaire <- renderPlotly({
       req("Salaire" %in% names(salaires))
       
-      hist(
-        salaires$Salaire,
-        breaks = 30,            # nombre de classes
-        main   = "Salaires (brut) - histogramme",
-        xlab   = "Salaire",
-        ylab   = "Effectif",
-        col = "skyblue",
-        border = "white"
-      )
+      plot_ly(
+        data = salaires,
+        x    = ~Salaire,
+        type = "histogram",
+        nbinsx = 30,
+        marker = list(color = "skyblue", line = list(color = "white", width = 1))
+      ) |>
+        layout(
+          title = "",
+          xaxis = list(title = "Salaire"),
+          yaxis = list(title = "Effectif"),
+          bargap = 0.05
+        )
     })
     
     # ------------------------------------------------------
     # Graphique 2 : barres par type de contrat
     # ------------------------------------------------------
-    output$plot_bar_contrat <- renderPlot({
-      # Sécurité : vérifie l'existence de la colonne
+    output$plot_bar_contrat <- renderPlotly({
       req("Contrat" %in% names(contrats))
       
-      # Tableau de fréquences simple
-      tab <- sort(table(contrats$Contrat), decreasing = TRUE)
+      # table -> data.frame pour plotly
+      df_tab <- as.data.frame(sort(table(contrats$Contrat), decreasing = TRUE))
+      names(df_tab) <- c("Contrat", "Effectif")
       
-      barplot(
-        tab,
-        main = "Nombre de contrats par type",
-        xlab = "Type de contrat",
-        ylab = "Effectif",
-        las  = 2,                # étiquettes verticales si besoin
-        col = "skyblue",
-        border ="white"
-      )
+      plot_ly(
+        data = df_tab,
+        x    = ~Contrat,
+        y    = ~Effectif,
+        type = "bar",
+        marker = list(color = "skyblue", line = list(color = "white", width = 1))
+      ) |>
+        layout(
+          title = "",
+          xaxis = list(title = "Type de contrat"),
+          yaxis = list(title = "Effectif")
+        )
     })
     
     

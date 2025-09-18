@@ -24,8 +24,22 @@ ui <- navbarPage(
           
           # Boutons (placeholders)
           fluidRow(
-            column(6, actionButton("btn_commencer", "Commencer")),
-            column(6, actionButton("btn_methodo", "Voir la méthodologie"))
+            column(
+              6,
+              actionButton(
+                inputId = "btn_commencer",
+                label   = "Commencer",
+                class   = "btn btn-primary"   # bouton bleu
+              )
+            ),
+            column(
+              6,
+              actionButton(
+                inputId = "btn_methodo",
+                label   = "Voir la méthodologie",
+                class   = "btn btn-default"   # bouton gris standard
+              )
+            )
           ),
           
           br(),
@@ -67,7 +81,7 @@ ui <- navbarPage(
               wellPanel(
                 style = "background-color: white;",   # fond blanc
                 strong("Distribution des salaires"),
-                plotOutput("plot_histo_salaire", height = 200)
+                plotlyOutput("plot_histo_salaire", height = 200)
               )
             )
           ),
@@ -79,7 +93,7 @@ ui <- navbarPage(
               wellPanel(
                 style = "background-color: white;",   # fond blanc
                 strong("Répartition des contrats"),
-                plotOutput("plot_bar_contrat", height = 200)
+                plotlyOutput("plot_bar_contrat", height = 200)
               )
             )
           ),
