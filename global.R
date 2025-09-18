@@ -14,7 +14,8 @@ library(lubridate)
 
 
 ############### DATA IMPORTATION #####################
-
+salaires <- read_excel("data/RH_Salaries.xlsx")
+contrats <- read_excel("data/RH_Contrats.xlsx")
 
 ############## DATA MANIPULATION ####################
 

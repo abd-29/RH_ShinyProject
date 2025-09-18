@@ -28,7 +28,7 @@ ui <- navbarPage(
       
       br(), # saut de ligne 
       
-      #ctrois indicateurs 
+      #trois indicateurs 
       fluidRow(
         column(
           4,
