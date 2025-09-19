@@ -36,7 +36,28 @@ server <- function(input, output, session)
       nrow(contrats)
     })
     
+    output$indicateur_salaire_moyen <- renderText({
+      if ("Salaire" %in% names(salaires)) {
+        moy <- mean(salaires$Salaire, na.rm = TRUE)
+        paste0(round(moy), " €")
+      } else {
+        "Non disponible"
+      }
+    })
     
+    # Titre dynamique
+    output$label_salaire <- renderText({
+      if (isTRUE(input$show_mean)) "Salaire moyen" else "Salaire médian"
+    })
+    
+    # Valeur dynamique
+    output$indicateur_salaire <- renderText({
+      if (!"Salaire" %in% names(salaires)) return("Non disponible")
+      val <- if (isTRUE(input$show_mean))
+        mean(salaires$Salaire, na.rm = TRUE) else
+          median(salaires$Salaire, na.rm = TRUE)
+      paste(format(round(val), big.mark = " ", scientific = FALSE), "€")
+    })
     
     # ------------------------------------------------------
     # Graphique 1 : histogramme des salaires

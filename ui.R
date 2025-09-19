@@ -104,10 +104,10 @@ ui <- navbarPage(
                 column(
                   6,
                   wellPanel(
-                    style = "padding:12px; margin-bottom:3px; min-height:90px;", # marge réduite
+                    style = "padding:12px; margin-bottom:3px; min-height:90px;", 
                     div(
                       style = "display:flex; align-items:center; gap:6px;",
-                      tags$img(src = "cdi_icone.png",  # ton logo dans www/
+                      tags$img(src = "cdi_icone.png",  
                                style = "height:20px;"),
                       "CDI"
                     ),
@@ -121,8 +121,16 @@ ui <- navbarPage(
                   6,
                   wellPanel(
                     style = "padding:12px; margin-bottom:3px; min-height:90px;", 
-                    "Contrats",
-                    div(style="font-size:1.2em;", textOutput("indicateur_contrats"))
+                    div(
+                      style = "display:flex; align-items:center; gap:6px;",
+                      tags$img(src = "contrat_icone.png",   # mets une icône dans www/
+                               style = "height:20px;"),
+                      "Contrats"
+                    ),
+                    div(
+                      style="font-size:1.6em; font-weight:bold; margin-left:30px;",
+                      textOutput("indicateur_contrats")
+                    )
                   )
                 )
               )
@@ -131,11 +139,33 @@ ui <- navbarPage(
             # Colonne droite : Salaire médian
             column(
               width = 4,
-              style = "padding-left:6px;",  
+              style = "padding-left:6px;",
               wellPanel(
                 style = "padding:12px; margin-bottom:6px; min-height:190px;",
-                "Salaire Médian",
-                div(style="font-size:1.8em; font-weight:bold;", textOutput("indicateur_salaire"))
+                
+                # Ligne titre + icône
+                div(
+                  style = "display:flex; align-items:center; gap:6px;",
+                  tags$img(src = "salaire_icone.png",   # ajoute une icône dans www/
+                           style = "height:20px;"),
+                  textOutput("label_salaire")           # libellé dynamique : médian ou moyen
+                ),
+                
+                # Chiffre en gras et grand
+                div(
+                  style="font-size:1.4em; font-weight:bold; margin-left:30px; margin-top:10px;",
+                  textOutput("indicateur_salaire")
+                ),
+                
+                # Bouton switch, placé plus bas
+                div(
+                  style="margin-top:20px; display:flex; justify-content:flex-end;",  # espace au-dessus
+                  materialSwitch(
+                    inputId = "show_mean",
+                    value = FALSE,     # FALSE = médian par défaut
+                    status = "primary"
+                  )
+                )
               )
             )
           )
