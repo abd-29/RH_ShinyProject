@@ -5,13 +5,16 @@
 # Define server logic 
 server <- function(input, output, session) 
   {
+  
+  # ============== CALCUL INDICATEUR PAGE ACCUEIL ==============
+  
     # Nombre de salarie
     output$indicateur_salaries <- renderText({
       n_distinct(salaires$id_salarié)
     })
     
     # calcul du pourcentage de contrat en cdi
-    output$indicateur_cdi      <- renderText({
+    output$indicateur_cdi <- renderText({
       
       if ("Contrat" %in% names(contrats)) {
         part <- mean(contrats$Contrat == "CDI", na.rm = TRUE) # calcul de la moyenne
@@ -21,15 +24,6 @@ server <- function(input, output, session)
       }
     })
     
-    # calcul du salaire median
-    output$indicateur_salaire  <- renderText({
-      if ("Salaire" %in% names(salaires)) {
-        med <- median(salaires$Salaire, na.rm = TRUE)
-        paste0(round(med), " €")
-      } else {
-        "Non disponible"
-      }
-    })
     
     # Nombre de contrat
     output$indicateur_contrats <- renderText({
@@ -45,7 +39,7 @@ server <- function(input, output, session)
       }
     })
     
-    # Titre dynamique
+    # salaire moyen et salaire median
     output$label_salaire <- renderText({
       if (isTRUE(input$show_mean)) "Salaire moyen" else "Salaire médian"
     })
@@ -86,9 +80,6 @@ server <- function(input, output, session)
     # ------------------------------------------------------
     # Graphique 2 : barres par type de contrat
     # ------------------------------------------------------
-    # Cercle de progression (exemple : % CDI)
-    # Cercle de progression (donut CDI / CDD)
-    # Cercle de progression (donut CDI / CDD)
     output$plot_pie_contrat <- renderPlotly({
       req("Contrat" %in% names(contrats))
       
@@ -111,7 +102,7 @@ server <- function(input, output, session)
         layout(showlegend = FALSE)
     })
     
-    # le bouton commencer pointe vers la page Explorer
+    # le bouton commencer pointe vers la page "Explorer"
     observeEvent(input$btn_commencer, {
     updateNavbarPage(session, "main_nav", selected = "Explorer")
 })

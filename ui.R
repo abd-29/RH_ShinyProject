@@ -4,9 +4,10 @@
 
 
 ui <- navbarPage(
-  title = tags$span("RH Pay Insights", style = "font-weight:bold; color:black;"),
+  title = tags$span("RH Pay Insights", style = "font-weight:bold; color:black;"),  # le titre 
   id = "main_nav", 
-   
+    
+  # defini le style du menu de navigation
   header = tags$style(HTML("
     .navbar.navbar-default {
       background-color: white !important;
@@ -35,31 +36,35 @@ ui <- navbarPage(
     fluidPage(
       titlePanel("Analyse de données des Salariés"),
       
-      # ======= MISE EN PAGE : GAUCHE (texte + indicateurs) et à DROITE (graphiques) =======
+      # ================ GAUCHE (textes + indicateurs) et à DROITE (graphiques) =======
       fluidRow(
-        # ---- Colonne gauche ----
+        
+        # ============ Colonne gauche =================
         column(
           width = 6,
           
-          # Intro
+          # phrase d'introduction
           p(
             "Ce site s'inscrit dans le cadre d'un projet universitaire. 
             Il permet d'explorer les salaires, comparer les groupes et exporter des résultats.",
             style = "font-size:1.2em;"   # augmente la taille
           ),
           
-          br(),
+          br(), # retour à la ligne
           
           # Boutons 
           fluidRow(
             column(
               12,
+                # =============== BOUTON COMMENCER ==========
               div(
                 actionButton(
                   "btn_commencer",
                   "Commencer",
                   class = "btn btn-primary btn-lg"
                 ),
+                
+                # le role du bouton
                 tags$a(
                   href   = "https://github.com/abd-29/RH_ShinyProject", # URL du depot git 
                   target = "_blank",
@@ -76,22 +81,22 @@ ui <- navbarPage(
           
           br(),
           
-          # --- Indicateurs ---
+          # =========== les indicateurs ====================
           fluidRow(
-            # Colonne gauche
             column(
               width = 8,
               style = "padding-right:6px;", 
               fluidRow(
+                # ============== BLOC NOMBRE SALARIE ========================
                 column(
                   12,
                   wellPanel(
                     style = "padding:12px; margin-bottom:6px; min-height:90px;",
                     div(
                       style = "display:flex; align-items:center; gap:6px;",
-                      tags$img(src = "salarie_icone.png",  # ton logo dans www/
+                      tags$img(src = "salarie_icone.png",  # icone
                                style = "height:20px;"),
-                      "Nombre de salariés"
+                               "Nombre de salariés"
                     ),
                     div(
                       style="font-size:1.8em; font-weight:bold; margin-left:40px;",
@@ -100,7 +105,9 @@ ui <- navbarPage(
                   )
                 )
               ),
+              
               fluidRow(
+                # ============== BLOC INDICATEUR CDI ========================
                 column(
                   6,
                   wellPanel(
@@ -117,6 +124,8 @@ ui <- navbarPage(
                     )
                   )
                 ),
+                
+                # ============== BLOC INDICATEUR CONTRAT ========================
                 column(
                   6,
                   wellPanel(
@@ -136,7 +145,7 @@ ui <- navbarPage(
               )
             ),
             
-            # Colonne droite : Salaire médian
+            # ============== BLOC SALAIRE MEDIAN ========================
             column(
               width = 4,
               style = "padding-left:6px;",
@@ -171,7 +180,8 @@ ui <- navbarPage(
           ),
            
           br(),
-          # Texte explicatif sous les indicateurs
+          
+          # Texte explicatif en dessous des indicateurs
           h4(em("À propos des indicateurs")),
           tags$ul(
             style = "font-style:italic; margin:6px 0 0; padding-left:22px; 
@@ -186,27 +196,29 @@ ui <- navbarPage(
           helpText("Données : RH_Contrats.xlsx et RH_Salaries.xlsx")
         ),
         
-        # ---- Colonne droite ----
+        # ============== PARTIE DES GRAPHIQUES ========================
+        # =============================================================
+        
         column(
           width = 6,
           
-          # premier graphique
-          fluidRow(
-            column(
-              12,
-              div(
-                strong("Distribution des salaires"),
-                plotlyOutput("plot_pie_contrat", height = 220)
-              )
-            )
-          ),
-          
-          # deuxième graphique
+          # graphique cercle
           fluidRow(
             column(
               12,
               div(
                 strong("Répartition des contrats"),
+                plotlyOutput("plot_pie_contrat", height = 220)
+              )
+            )
+          ),
+          
+          # histogramme pour les salaire
+          fluidRow(
+            column(
+              12,
+              div(
+                strong("Distribution des salaires"),
                 plotlyOutput("plot_histo_salaire", height = 300)
               )
             )
