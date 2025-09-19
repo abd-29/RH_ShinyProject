@@ -12,9 +12,9 @@ ui <- navbarPage(
     fluidPage(
       titlePanel("Analyse de données des Salariés"),
       
-      # ======= MISE EN PAGE : GAUCHE (texte + indicateurs) / DROITE (graphiques) =======
+      # ======= MISE EN PAGE : GAUCHE (texte + indicateurs) et à DROITE (graphiques) =======
       fluidRow(
-        # ---- Colonne gauche : texte + 3 indicateurs ----
+        # ---- Colonne gauche ----
         column(
           width = 6,
           
@@ -27,34 +27,38 @@ ui <- navbarPage(
           
           br(),
           
-          # Boutons (placeholders)
+          # Boutons 
           fluidRow(
             column(
-              6,
-              actionButton(
-                inputId = "btn_commencer",
-                label   = "Commencer",
-                class   = "btn btn-primary btn-lg"   # bouton bleu
-              )
-            ),
-            column(
-              6,
-              actionButton(
-                inputId = "btn_methodo",
-                label   = "Voir la méthodologie",
-                class   = "btn btn-default btn-lg"   # bouton gris standard
+              12,
+              div(
+                actionButton(
+                  "btn_commencer",
+                  "Commencer",
+                  class = "btn btn-primary btn-lg"
+                ),
+                tags$a(
+                  href   = "https://github.com/abd-29/RH_ShinyProject", # URL du depot git 
+                  target = "_blank",
+                  class  = "btn btn-default btn-lg",
+                  tags$img(src = "logo_git.png",       # on rajoute un logo de git 
+                           style = "height:20px; margin-right:6px; vertical-align:middle;",
+                           alt = "GitHub"),
+                  span("Voir la méthodologie")
+                ),
+                style = "display:flex; gap:10px;"
               )
             )
           ),
           
           br(),
           
-          # --- Indicateurs (version agrandie) ---
+          # --- Indicateurs ---
           fluidRow(
             # Colonne gauche
             column(
               width = 8,
-              style = "padding-right:6px;",   # réduit l’espace à droite
+              style = "padding-right:6px;", 
               fluidRow(
                 column(
                   12,
@@ -88,7 +92,7 @@ ui <- navbarPage(
             # Colonne droite : Salaire médian
             column(
               width = 4,
-              style = "padding-left:6px;",   # réduit l’espace à gauche
+              style = "padding-left:6px;",  
               wellPanel(
                 style = "padding:12px; margin-bottom:6px; min-height:190px;",
                 strong("Salaire médian"),
@@ -102,11 +106,11 @@ ui <- navbarPage(
           helpText("Données : RH_Contrats.xlsx et RH_Salaries.xlsx")
         ),
         
-        # ---- Colonne droite : deux graphiques superposés ----
+        # ---- Colonne droite ----
         column(
           width = 6,
           
-          # Ligne 1 : premier graphique
+          # premier graphique
           fluidRow(
             column(
               12,
@@ -117,7 +121,7 @@ ui <- navbarPage(
             )
           ),
           
-          # Ligne 2 : deuxième graphique
+          # deuxième graphique
           fluidRow(
             column(
               12,
@@ -128,7 +132,7 @@ ui <- navbarPage(
             )
           ),
           
-          # Ligne 3 : vide (place réservée)
+          # vide pour le moment
           fluidRow(
             column(
               12
