@@ -4,8 +4,39 @@
 
 
 ui <- navbarPage(
-  "RH Pay Insights",
-   id = "main_nav", 
+  title = tags$span("RH Pay Insights", style = "font-weight:bold; color:black;"),
+  id = "main_nav", 
+   
+   header = tags$style(HTML("
+    /* Fond blanc de la barre */
+    .navbar.navbar-default {
+      background-color: white !important;
+      border: none;
+    }
+
+    /* Couleur du texte par défaut */
+    .navbar-default .navbar-nav > li > a {
+      color: black !important;
+    }
+
+    /* Effet au survol */
+    .navbar-default .navbar-nav > li > a:hover {
+      color: #007BFF !important;        /* bleu */
+      text-decoration: underline;       /* souligné */
+      text-decoration-color: #007BFF;   /* souligné bleu */
+    }
+
+    /* Onglet actif */
+    .navbar-default .navbar-nav > .active > a,
+    .navbar-default .navbar-nav > .active > a:focus,
+    .navbar-default .navbar-nav > .active > a:hover {
+      color: #007BFF !important;
+      background-color: white !important;
+      font-weight: bold;
+      text-decoration: underline;
+      text-decoration-color: #007BFF;
+    }
+  ")),
   
   # la page d'accueil
   tabPanel(
