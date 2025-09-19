@@ -5,6 +5,7 @@
 
 ui <- navbarPage(
   "RH Pay Insights",
+   id = "main_nav", 
   
   # la page d'accueil
   tabPanel(

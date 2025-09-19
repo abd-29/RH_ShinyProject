@@ -90,8 +90,10 @@ server <- function(input, output, session)
         layout(showlegend = FALSE)
     })
     
-    
-    
+    # le bouton commencer pointe vers la page Explorer
+    observeEvent(input$btn_commencer, {
+    updateNavbarPage(session, "main_nav", selected = "Explorer")
+})
     
     
 }
