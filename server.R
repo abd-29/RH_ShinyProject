@@ -31,14 +31,9 @@ server <- function(input, output, session)
       }
     })
     
-    # Salaire moyen (nouvel indicateur)
-    output$indicateur_salaire_moyen <- renderText({
-      if ("Salaire" %in% names(salaires)) {
-        moy <- mean(salaires$Salaire, na.rm = TRUE)
-        paste(format(round(moy), big.mark = " ", scientific = FALSE), "€")
-      } else {
-        "Non disponible"
-      }
+    # Nombre de contrat
+    output$indicateur_contrats <- renderText({
+      nrow(contrats)
     })
     
     
@@ -55,7 +50,7 @@ server <- function(input, output, session)
         type = "histogram",
         nbinsx = 30,
         marker = list(
-          color = "skyblue",        # barres bleu ciel
+          color = "blue",        # barres bleu ciel
           line  = list(color = "transparent") # pas de bordure
         )
       ) |>
@@ -70,29 +65,33 @@ server <- function(input, output, session)
     # ------------------------------------------------------
     # Graphique 2 : barres par type de contrat
     # ------------------------------------------------------
-    output$plot_bar_contrat <- renderPlotly({
+    # Cercle de progression (exemple : % CDI)
+    # Cercle de progression (donut CDI / CDD)
+    # Cercle de progression (donut CDI / CDD)
+    output$plot_pie_contrat <- renderPlotly({
       req("Contrat" %in% names(contrats))
       
-      # table -> data.frame pour plotly
-      df_tab <- as.data.frame(sort(table(contrats$Contrat), decreasing = TRUE))
-      names(df_tab) <- c("Contrat", "Effectif")
+      tab <- data.frame(
+        Etat = c("CDI", "CDD"),
+        Valeur = c(sum(contrats$Contrat == "CDI", na.rm = TRUE),
+                   sum(contrats$Contrat == "CDD", na.rm = TRUE))
+      )
       
       plot_ly(
-        data = df_tab,
-        x    = ~Contrat,
-        y    = ~Effectif,
-        type = "bar",
-        marker = list(
-          color = "skyblue",        # barres bleu ciel
-          line  = list(color = "transparent") # pas de bordure
-        )
+        data   = tab,
+        labels = ~Etat,
+        values = ~Valeur,
+        type   = "pie",
+        hole   = 0.6,
+        marker = list(colors = c("blue", "lightgray")),
+        textinfo = "label+percent",   # % affichés sur le graphe
+        hovertemplate = "%{label} : %{value}<extra></extra>" # infobulle = uniquement nombre
       ) |>
-        layout(
-          title = "",
-          xaxis = list(title = "Type de contrat"),
-          yaxis = list(title = "Effectif")
-        )
+        layout(showlegend = FALSE)
     })
+    
+    
+    
     
     
 }
