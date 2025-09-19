@@ -7,34 +7,22 @@ ui <- navbarPage(
   title = tags$span("RH Pay Insights", style = "font-weight:bold; color:black;"),
   id = "main_nav", 
    
-   header = tags$style(HTML("
-    /* Fond blanc de la barre */
+  header = tags$style(HTML("
     .navbar.navbar-default {
       background-color: white !important;
-      border: none;
     }
-
-    /* Couleur du texte par défaut */
     .navbar-default .navbar-nav > li > a {
       color: black !important;
     }
-
-    /* Effet au survol */
     .navbar-default .navbar-nav > li > a:hover {
-      color: #007BFF !important;        /* bleu */
-      text-decoration: underline;       /* souligné */
-      text-decoration-color: #007BFF;   /* souligné bleu */
+      color: #007BFF !important;
+      text-decoration: underline;
     }
-
-    /* Onglet actif */
-    .navbar-default .navbar-nav > .active > a,
-    .navbar-default .navbar-nav > .active > a:focus,
-    .navbar-default .navbar-nav > .active > a:hover {
+    .navbar-default .navbar-nav > .active > a {
       color: #007BFF !important;
       background-color: white !important;
       font-weight: bold;
       text-decoration: underline;
-      text-decoration-color: #007BFF;
     }
   ")),
   
@@ -177,6 +165,6 @@ ui <- navbarPage(
   
   # Creation des autres onglets mais vide pour le moment
   tabPanel("Explorer", fluidPage(h3("À venir"))),
-  tabPanel("Exports", fluidPage(h3("À venir"))),
+  tabPanel("Exporter les données", fluidPage(h3("À venir"))),
   tabPanel("À propos", fluidPage(h3("À venir")))
 )
