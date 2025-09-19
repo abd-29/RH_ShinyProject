@@ -114,6 +114,83 @@ server <- function(input, output, session)
     ############################################################################
     ##                       PARTIE EXPORTER DU SITE                          ##
     ############################################################################
+    observe({
+      if ("Salaire" %in% names(salaires)) {
+        mx <- suppressWarnings(max(salaires$Salaire, na.rm = TRUE))
+        if (is.finite(mx)) updateSliderInput(session, "filtre_salaire_min", max = ceiling(mx))
+      }
+      if ("Age" %in% names(salaires)) {
+        a <- range(salaires$Age, na.rm = TRUE)
+        if (all(is.finite(a))) updateSliderInput(session, "age_range", min = floor(a[1]), max = ceiling(a[2]),
+                                                 value = c(floor(a[1]), ceiling(a[2])))
+      }
+      if ("Annee_naissance" %in% names(salaires)) {
+        y <- range(salaires$Annee_naissance, na.rm = TRUE)
+        if (all(is.finite(y))) updateSliderInput(session, "annee_range", min = y[1], max = y[2], value = y)
+      }
+    })
     
+    # 1) Table jointe pour filtrage (clé supposée: id_salarié)
+    donnees_jointes <- reactive({
+      if ("id_salarié" %in% names(salaires) && "id_salarié" %in% names(contrats)) {
+        dplyr::left_join(salaires, contrats, by = "id_salarié")
+      } else {
+        # si la clé diffère, on renvoie simplement salaires
+        salaires
+      }
+    })
+    
+    # 2) Application des filtres (on n'applique que si la colonne existe)
+    donnees_filtrees_all <- reactive({
+      df <- donnees_jointes()
+      
+      if ("Salaire" %in% names(df)) df <- df[df$Salaire >= input$filtre_salaire_min | is.na(df$Salaire), , drop = FALSE]
+      if (nzchar(input$filtre_contrat) && "Contrat" %in% names(df)) df <- df[df$Contrat == input$filtre_contrat, , drop = FALSE]
+      if ("Age" %in% names(df)) df <- df[df$Age >= input$age_range[1] & df$Age <= input$age_range[2], , drop = FALSE]
+      if ("Annee_naissance" %in% names(df)) df <- df[df$Annee_naissance >= input$annee_range[1] &
+                                                       df$Annee_naissance <= input$annee_range[2], , drop = FALSE]
+      if ("Nb_enfants" %in% names(df)) df <- df[df$Nb_enfants >= input$nb_enfants_min, , drop = FALSE]
+      if (input$sexe != "Tous" && "Sexe" %in% names(df)) df <- df[df$Sexe == input$sexe, , drop = FALSE]
+      if (input$heures != "all") {
+        colh <- intersect(c("Heures_hebdo","HeuresHebdo","hebdo_heures"), names(df))
+        if (length(colh) == 1) df <- df[df[[colh]] == as.numeric(input$heures), , drop = FALSE]
+      }
+      df
+    })
+    
+    # 3) Aperçu (10 lignes si case cochée)
+    output$table_filtre_preview <- renderTable({
+      df <- if (isTRUE(input$preview10)) head(donnees_filtrees_all(), 10) else donnees_filtrees_all()
+      
+      # petite fonction d'affichage
+      to_display <- function(x) {
+        if (is.numeric(x)) {
+          ifelse(is.na(x), "Non renseigné",
+                 format(x, big.mark = " ", trim = TRUE, scientific = FALSE))
+        } else {
+          ifelse(is.na(x) | x == "", "Non renseigné", as.character(x))
+        }
+      }
+      
+      # colonnes à nettoyer si elles existent
+      cols <- intersect(c("Enfants", "Etat Civil", "Salaire"), names(df))
+      for (cl in cols) df[[cl]] <- to_display(df[[cl]])
+      
+      df
+    }, striped = TRUE, bordered = TRUE)
+    
+    # 4) Téléchargements CSV (séparateur ;, compatible Excel FR)
+    output$dl_salaries_csv <- downloadHandler(
+      filename = function() "RH_Salaries.csv",
+      content  = function(file) write.csv2(salaires, file, row.names = FALSE, fileEncoding = "UTF-8")
+    )
+    output$dl_contrats_csv <- downloadHandler(
+      filename = function() "RH_Contrats.csv",
+      content  = function(file) write.csv2(contrats, file, row.names = FALSE, fileEncoding = "UTF-8")
+    )
+    output$dl_filtre_csv <- downloadHandler(
+      filename = function() "Donnees_filtrees.csv",
+      content  = function(file) write.csv2(donnees_filtrees_all(), file, row.names = FALSE, fileEncoding = "UTF-8")
+    )
     
 }

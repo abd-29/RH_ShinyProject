@@ -270,15 +270,35 @@ ui <- navbarPage(
                     tabPanel("Tableau",
                              h4("Données filtrées"),
                              tableOutput("table_filtre_preview")),
-                    tabPanel("Exporter",
-                             h4("Téléchargements"),
-                             div(style="margin-bottom:8px;",
-                                 downloadButton("dl_salaries_csv", "RH_Salaries.csv")),
-                             div(style="margin-bottom:8px;",
-                                 downloadButton("dl_contrats_csv", "RH_Contrats.csv")),
-                             div(style="margin-bottom:8px;",
-                                 downloadButton("dl_filtre_csv", "Donnees_filtrees.csv"))
+                    tabPanel(
+                      "Exporter",
+                      h4("Téléchargements"),
+                      
+                      # --- Fichier Salaires ---
+                      wellPanel(
+                        strong("RH_Salaries.csv"),
+                        p("Table des salariés (une ligne par salarié).",
+                          "Colonnes principales : id_salarié, Sexe, Année_naissance, Etat Civil, Enfants, Salaire, Age, Durée hebdo (si présente)."),
+                        downloadButton("dl_salaries_csv", "Télécharger RH_Salaries.csv")
+                      ),
+                      
+                      # --- Fichier Contrats ---
+                      wellPanel(
+                        strong("RH_Contrats.csv"),
+                        p("Table des contrats associés aux salariés.",
+                          "Colonnes principales : id_salarié, Contrat, autres informations disponibles selon le fichier."),
+                        downloadButton("dl_contrats_csv", "Télécharger RH_Contrats.csv")
+                      ),
+                      
+                      # --- Fichier filtré ---
+                      wellPanel(
+                        strong("Donnees_filtrees.csv"),
+                        p("Table résultant de vos choix de filtres (âge, sexe, situation, salaire minimum, etc.).",
+                          "Utile pour partager exactement la sélection affichée dans l’onglet « Tableau »."),
+                        downloadButton("dl_filtre_csv", "Télécharger Donnees_filtrees.csv")
+                      )
                     )
+                    
                   )
         )
       )
