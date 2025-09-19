@@ -237,6 +237,53 @@ ui <- navbarPage(
   
   # Creation des autres onglets mais vide pour le moment
   tabPanel("Explorer", fluidPage(h3("À venir"))),
-  tabPanel("Exporter les données", fluidPage(h3("À venir"))),
+  
+  
+  #############################################################################
+  ##                        PAGE EXPORTER LES DONNEES                        ##
+  #############################################################################
+  tabPanel(
+    "Exporter les données",
+    fluidPage(
+      titlePanel("Exporter les données"),
+      sidebarLayout(
+        # ---- GAUCHE : FILTRES ----
+        sidebarPanel(width = 4,
+                     h4("Filtres"),
+                     sliderInput("age_range", "Âge", min = 18, max = 70, value = c(18, 70)),
+                     selectInput("sit_mat", "Situation matrimoniale",
+                                 choices = c("Toutes", "Célibataire", "Marié(e)"),
+                                 selected = "Toutes"),
+                     numericInput("nb_enfants_min", "Nombre d'enfants (min)", value = 0, min = 0, step = 1),
+                     sliderInput("annee_range", "Année de naissance", min = 1950, max = 2010, value = c(1980, 2000)),
+                     radioButtons("sexe", "Sexe", choices = c("Tous","H","F"), selected = "Tous", inline = TRUE),
+                     radioButtons("heures", "Heures hebdo", choices = c("Toutes" = "all", "24" = "24", "35" = "35"),
+                                  selected = "all", inline = TRUE),
+                     textInput("filtre_contrat", "Contrat (ex: CDI)", ""),
+                     sliderInput("filtre_salaire_min", "Salaire minimum", min = 0, max = 10000, value = 0),
+                     checkboxInput("preview10", "Aperçu sur 10 lignes", TRUE)
+        ),
+        
+        # ---- DROITE : MENU TABLEAU / EXPORTER ----
+        mainPanel(width = 8,
+                  tabsetPanel(
+                    tabPanel("Tableau",
+                             h4("Données filtrées"),
+                             tableOutput("table_filtre_preview")),
+                    tabPanel("Exporter",
+                             h4("Téléchargements"),
+                             div(style="margin-bottom:8px;",
+                                 downloadButton("dl_salaries_csv", "RH_Salaries.csv")),
+                             div(style="margin-bottom:8px;",
+                                 downloadButton("dl_contrats_csv", "RH_Contrats.csv")),
+                             div(style="margin-bottom:8px;",
+                                 downloadButton("dl_filtre_csv", "Donnees_filtrees.csv"))
+                    )
+                  )
+        )
+      )
+    )
+  )
+  ,
   tabPanel("À propos", fluidPage(h3("À venir")))
 )

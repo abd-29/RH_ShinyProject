@@ -6,6 +6,10 @@
 server <- function(input, output, session) 
   {
   
+  
+  ############################################################################
+  ##                       PARTIE ACCUEIL DU SITE                           ##
+  ############################################################################
   # ============== CALCUL INDICATEUR PAGE ACCUEIL ==============
   
     # Nombre de salarie
@@ -106,6 +110,10 @@ server <- function(input, output, session)
     observeEvent(input$btn_commencer, {
     updateNavbarPage(session, "main_nav", selected = "Explorer")
 })
+    
+    ############################################################################
+    ##                       PARTIE EXPORTER DU SITE                          ##
+    ############################################################################
     
     
 }
