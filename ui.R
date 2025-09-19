@@ -13,16 +13,19 @@ ui <- navbarPage(
     }
     .navbar-default .navbar-nav > li > a {
       color: black !important;
+      border-bottom: 3px solid transparent;
     }
-    .navbar-default .navbar-nav > li > a:hover {
+    /* Effet hover uniquement sur les onglets non actifs */
+    .navbar-default .navbar-nav > li:not(.active) > a:hover {
       color: #007BFF !important;
-      text-decoration: underline;
+      border-bottom: 3px solid #007BFF;
     }
+    /* Onglet actif : reste bleu souligné même au survol des autres */
     .navbar-default .navbar-nav > .active > a {
       color: #007BFF !important;
       background-color: white !important;
       font-weight: bold;
-      text-decoration: underline;
+      border-bottom: 3px solid #007BFF;
     }
   ")),
   
@@ -115,7 +118,7 @@ ui <- navbarPage(
               style = "padding-left:6px;",  
               wellPanel(
                 style = "padding:12px; margin-bottom:6px; min-height:190px;",
-                strong("Salaire médian"),
+                strong("Salaire Médian"),
                 div(style="font-size:1.8em; font-weight:bold;", textOutput("indicateur_salaire"))
               )
             )
