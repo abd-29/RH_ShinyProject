@@ -87,8 +87,16 @@ ui <- navbarPage(
                   12,
                   wellPanel(
                     style = "padding:12px; margin-bottom:6px; min-height:90px;",
-                    strong("Nombre de salariés"),
-                    div(style="font-size:1.2em;", textOutput("indicateur_salaries"))
+                    div(
+                      style = "display:flex; align-items:center; gap:6px;",
+                      tags$img(src = "salarie_icone.png",  # ton logo dans www/
+                               style = "height:20px;"),
+                      "Nombre de salariés"
+                    ),
+                    div(
+                      style="font-size:1.8em; font-weight:bold; margin-left:40px;",
+                      textOutput("indicateur_salaries")
+                    )
                   )
                 )
               ),
