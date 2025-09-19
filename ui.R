@@ -105,15 +105,23 @@ ui <- navbarPage(
                   6,
                   wellPanel(
                     style = "padding:12px; margin-bottom:3px; min-height:90px;", # marge réduite
-                    strong("CDI"),
-                    div(style="font-size:1.2em;", textOutput("indicateur_cdi"))
+                    div(
+                      style = "display:flex; align-items:center; gap:6px;",
+                      tags$img(src = "cdi_icone.png",  # ton logo dans www/
+                               style = "height:20px;"),
+                      "CDI"
+                    ),
+                    div(
+                      style="font-size:1.6em; font-weight:bold; margin-left:30px;",
+                      textOutput("indicateur_cdi")
+                    )
                   )
                 ),
                 column(
                   6,
                   wellPanel(
-                    style = "padding:12px; margin-bottom:3px; min-height:90px;", # marge réduite
-                    strong("Contrats"),
+                    style = "padding:12px; margin-bottom:3px; min-height:90px;", 
+                    "Contrats",
                     div(style="font-size:1.2em;", textOutput("indicateur_contrats"))
                   )
                 )
@@ -126,7 +134,7 @@ ui <- navbarPage(
               style = "padding-left:6px;",  
               wellPanel(
                 style = "padding:12px; margin-bottom:6px; min-height:190px;",
-                strong("Salaire Médian"),
+                "Salaire Médian",
                 div(style="font-size:1.8em; font-weight:bold;", textOutput("indicateur_salaire"))
               )
             )
