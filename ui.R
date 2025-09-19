@@ -168,8 +168,19 @@ ui <- navbarPage(
                 )
               )
             )
-          )
-          ,
+          ),
+           
+          br(),
+          # Texte explicatif sous les indicateurs
+          h4(em("À propos des indicateurs")),
+          tags$ul(
+            style = "font-style:italic; margin:6px 0 0; padding-left:22px; 
+           list-style:disc; list-style-position:outside; line-height:1.35; text-align:justify;",
+            tags$li("Nombre de salariés : effectif unique des personnes présentes dans les données."),
+            tags$li("CDI : part des contrats de type CDI parmi l'ensemble des contrats."),
+            tags$li("Contrats : nombre total de contrats recensés."),
+            tags$li("Salaire médian / moyen : montants en euros. Le bouton permet d’alterner l’affichage.")
+          ),
           
           br(),
           helpText("Données : RH_Contrats.xlsx et RH_Salaries.xlsx")
