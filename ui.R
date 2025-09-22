@@ -252,7 +252,7 @@ ui <- navbarPage(
                      h4("Filtres"),
                      sliderInput("age_range", "Âge", min = 18, max = 70, value = c(18, 70)),
                      selectInput("sit_mat", "Situation matrimoniale",
-                                 choices = c("Toutes", "Célibataire", "Marié(e)"),
+                                 choices = c("Toutes", "Célibataire", "Marié"),
                                  selected = "Toutes"),
                      numericInput("nb_enfants_min", "Nombre d'enfants (min)", value = 0, min = 0, step = 1),
                      sliderInput("annee_range", "Année de naissance", min = 1950, max = 2010, value = c(1980, 2000)),
