@@ -305,5 +305,109 @@ ui <- navbarPage(
     )
   )
   ,
-  tabPanel("À propos", fluidPage(h3("À venir")))
+  tabPanel(
+    "À propos",
+    fluidPage(
+      tags$head(
+        tags$style(HTML("
+        .about-wrap { max-width: 980px; margin: 0 auto; padding: 32px 8px 60px; }
+        .about-hero { padding: 8px 0 12px; }
+        .about-hero h1 { font-size: 2.2rem; font-weight: 800; margin: 0 0 8px; }
+        .about-hero p  { color:#4b5563; font-size:1.06rem; margin:0; }
+
+        .card { background:#fff; border-radius:16px; box-shadow:0 6px 18px rgba(2,6,23,.08); padding:20px; margin-top:16px; }
+        .card h2 { font-size:1.2rem; font-weight:800; margin:0 0 10px; }
+        .muted { color:#6b7280; }
+
+        .list { margin:0; padding-left:18px; line-height:1.6; }
+        .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#eef2ff; color:#1f2937; font-weight:600; font-size:.85rem; }
+
+        .link { color:#0A66C2 !important; font-weight:600; text-decoration:none; }
+        .link:hover { text-decoration:underline; }
+
+        .authors { margin-top:28px; }
+        .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+        .author-card { background:#fff; border-radius:16px; box-shadow:0 6px 18px rgba(2,6,23,.08); padding:18px; display:flex; align-items:center; gap:14px; }
+        .avatar { width:64px; height:64px; border-radius:999px; border:2px solid #eef2ff; object-fit:cover; }
+        .author-name { font-size:1.05rem; font-weight:700; margin:0; }
+        .author-role { font-size:.95rem; color:#6b7280; margin:2px 0 8px; }
+        .btn-ln  { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px;
+                   background:#0A66C2; color:#fff !important; text-decoration:none; font-weight:600; }
+        .btn-ln:hover { filter:brightness(1.05); box-shadow:0 8px 20px rgba(10,102,194,.25); }
+        .btn-ln svg { width:16px; height:16px; }
+      "))
+      ),
+      
+      div(class="about-wrap",
+          
+          # En-tête
+          div(class="about-hero",
+              h1("À propos"),
+          ),
+          
+          # Ce que propose cette page
+          div(class="card",
+              h2("Ce que propose cette page"),
+              tags$ul(class="list",
+                      tags$li(HTML("<strong>Contexte & objectifs :</strong> Data Visualisation sur les données RH_salaries et RH_contrats.")),
+                      tags$li(HTML("<strong>Fonctionnalités clés :</strong> indicateurs d’accueil, histogrammes interactifs, filtres avancés et exports CSV.")),
+                      tags$li(HTML("<strong>Portée & limites :</strong> données fictives à visée pédagogique ; les résultats ne constituent pas une politique RH.")),
+              )
+          ),
+          
+          # Données
+          div(class="card",
+              h2("Méthodologie & données"),
+              tags$p(class="muted", "Traitements réalisés avec R et application sous Shiny. Visualisations interactives via plotly et thème bslib."),
+              tags$ul(class="list",
+                      tags$li(HTML("<span class='pill'>Sources</span> : fichiers <em>RH_Salaries.xlsx</em> et <em>RH_Contrats.xlsx</em>.")),
+                      tags$li(HTML("<span class='pill'>Préparation</span> : renommage des variables, exclusion des salariés sans contrat, contrôles de cohérence.")),
+              )
+          ),
+
+          
+          # Auteurs 
+          div(class="authors",
+              h2("Auteurs"),
+              div(class="grid",
+                  
+                  # Auteur 1
+                  div(class="author-card",
+                      tags$img(class="avatar",
+                               src="avatar_abdoulaye.png",
+                               onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=TOURE+Abdoulaye+Wade&background=2563eb&color=fff&size=128';",
+                               alt="Avatar TOURE Abdoulaye Wade"),
+                      div(
+                        tags$p(class="author-name","TOURE Abdoulaye Wade"),
+                        tags$p(class="author-role","Étudiant en Master Sciences des données"),
+                        tags$a(class="btn-ln",
+                               href="https://www.linkedin.com/in/abdoulaye-wade-tour%C3%A9-5b1800229/",  
+                               target="_blank",
+                               HTML('<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.84v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.09V23h-4v-6.64c0-1.58-.03-3.61-2.2-3.61-2.2 0-2.54 1.72-2.54 3.5V23h-4V8z"/></svg>'),
+                               "LinkedIn")
+                      )
+                  ),
+                  
+                  # Auteur 2
+                  div(class="author-card",
+                      tags$img(class="avatar",
+                               src="avatar_daouda.png",
+                               onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=DIOP+Daouda&background=059669&color=fff&size=128';",
+                               alt="Avatar DIOP Daouda"),
+                      div(
+                        tags$p(class="author-name","DIOP Daouda"),
+                        tags$p(class="author-role","Master en modélisation statistique"),
+                        tags$a(class="btn-ln",
+                               href="https://www.linkedin.com/",   
+                               target="_blank",
+                               HTML('<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.84v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.09V23h-4v-6.64c0-1.58-.03-3.61-2.2-3.61-2.2 0-2.54 1.72-2.54 3.5V23h-4V8z"/></svg>'),
+                               "LinkedIn")
+                      )
+                  )
+              )
+          )
+      )
+    )
+  )
+  
 )
