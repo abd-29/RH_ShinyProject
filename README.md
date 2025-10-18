@@ -81,3 +81,9 @@ Un **nettoyage des données** est effectué dans `global.R` :
 ```bash
 git clone https://github.com/abd-29/RH_ShinyProject.git
 cd RH_ShinyProject
+```
+
+### lien vers le site Web
+```bash
+https://awt2903.shinyapps.io/RH-Pay-Insights/
+```
