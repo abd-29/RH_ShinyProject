@@ -15,7 +15,7 @@ L’application permet :
 
 ## Structure du projet
 
-### 1. Fichiers principaux
+### Fichiers principaux
 | Fichier | Rôle |
 |----------|------|
 | **global.R** | Chargement des bibliothèques, importation et préparation des données. |
@@ -39,7 +39,7 @@ Un **nettoyage des données** est effectué dans `global.R` :
 
 ---
 
-## 🖥️ Fonctionnalités actuelles
+## Fonctionnalités actuelles
 
 ### Onglet **Accueil**
 - Indicateurs : nombre de salariés, nombre de contrats, part de CDI, salaire médian/moyen (commutable).  
@@ -57,7 +57,7 @@ Un **nettoyage des données** est effectué dans `global.R` :
   - `RH_Contrats.csv` (table des contrats),
   - `Donnees_filtrees.csv` (résultat des filtres actifs).
 
-### ℹOnglet **À propos**
+### Onglet **À propos**
 - Présentation du projet et des données.  
 - Liens vers le dépôt GitHub et les profils des auteurs :
   - **TOURE Abdoulaye Wade** – Master Sciences des Données  
@@ -75,7 +75,7 @@ Un **nettoyage des données** est effectué dans `global.R` :
 
 ---
 
-## 🚀 Lancer l’application
+## Lancer l’application
 
 ### Cloner le dépôt
 ```bash
