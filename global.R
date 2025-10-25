@@ -48,6 +48,11 @@ data <- Salaires %>%
   inner_join(Contrats, by = "id_salarie")
 
 
+# supprimer les lignes 55 et 70 d'identifiants respectifs 
+# 16241218-7045   16310403-3810 à cause de doublure
+
+data = data[-c(55, 70), ]
+
 
 ############## FUNCTIONS ###########################
 
