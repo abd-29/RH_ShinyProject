@@ -236,7 +236,96 @@ ui <- navbarPage(
   ),
   
   # Creation des autres onglets mais vide pour le moment
-  tabPanel("Explorer", fluidPage(h3("À venir"))),
+  # Onglet Explorer
+  
+  tabPanel(
+    "Explorer",
+    fluidPage(
+      tags$head(tags$style(HTML("
+  :root{ --ink:#0b1222; }                 /* encore plus foncé */
+  .card h4{ 
+    color:var(--ink) !important; 
+    font-weight:900; 
+    letter-spacing:-.2px; 
+    margin:0 0 8px;
+  }
+"))),
+      
+      tags$head(tags$style(HTML("
+  .page-title-wrap{ margin:0 0 12px; }
+  .page-title{ margin:0; color:var(--ink); font-weight:800; }
+
+  .card.kpi{
+    text-align:center; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    min-height:100px; padding:12px 20px;    /* plus compacte */
+  }
+  .card.kpi h3{
+    font-size:20px; font-weight:800; margin:0 0 4px; color:var(--ink);
+  }
+  .card.kpi .val{
+    color:var(--brand-dark); font-weight:900; line-height:1;
+    font-size:clamp(40px, 5.5vw, 64px);       /* grand mais pas énorme */
+    letter-spacing:-0.5px;
+  }
+  /* Option : encore moins d'espace entre les cartes
+  .card{ margin-bottom:14px; }
+  
+  */
+"))),
+      
+      
+      
+      div(class = "page-title-wrap", h2("Explorer", class = "page-title")),
+      fluidRow(
+        # ------------------ FILTRES (gauche) ------------------
+        column(3,
+               div(class="card",
+                   h4("Filtres"),
+                   selectInput("exp_contrat", "Type de contrat", choices = "(Tous)"),
+                   selectInput("exp_sexe", "Sexe", choices = c("(Tous)", "H", "F")),
+                   selectInput("exp_etat", "État civil", choices = "(Tous)"),
+                   sliderInput("exp_age", "Âge", min = 18, max = 70, value = c(18, 70)),
+                   actionLink("exp_reset", "Réinitialiser")
+               )
+        ),
+        # ------------------ CONTENU (droite) ------------------
+        column(9,
+               # KPI total salariés
+               div(class="card kpi",
+                   h3("Total salariés"),
+                   div(class="val", textOutput("exp_n"))
+               ),
+               # Ligne 1 : Genre / Âges
+               fluidRow(
+                 column(6,
+                        div(class="card",
+                            h4("Genre"),
+                            plotlyOutput("exp_pie_gender", height = 260)
+                        )
+                 ),
+                 column(6,
+                        div(class="card",
+                            h4("Répartition des âges"),
+                            plotlyOutput("exp_bar_age", height = 260)
+                        )
+                 )
+               ),
+               # Ligne 2 : Salaire moyen par ...
+               div(class="card",
+                   div(style="display:flex;justify-content:space-between;align-items:center;gap:10px",
+                       h4("Salaire moyen par"),
+                       selectInput("exp_by", NULL,
+                                   choices = c("Type de contrat","État civil","Sexe"),
+                                   width = "220px")
+                   ),
+                   plotlyOutput("exp_bar_salary", height = 420)
+               )
+        )
+      )
+    )
+  )
+  ,
   
   
   #############################################################################

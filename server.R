@@ -195,4 +195,105 @@ server <- function(input, output, session)
       content  = function(file) write.csv2(donnees_filtrees_all(), file, row.names = FALSE, fileEncoding = "UTF-8")
     )
     
+    # =========================== ONGLET EXPLORER ============================
+    
+    # Base propre + modalités "Inconnu"
+    exp_base <- reactive({
+      req(exists("data"))
+      df <- data |>
+        mutate(
+          contrat    = ifelse(is.na(contrat) | contrat == "", "Inconnu", as.character(contrat)),
+          etat_civil = ifelse(is.na(etat_civil) | etat_civil == "", "Inconnu", as.character(etat_civil)),
+          sexe       = ifelse(is.na(sexe) | sexe == "", "Inconnu", as.character(sexe))
+        )
+      df
+    })
+    
+    # Choix dynamiques + bornes d'âge
+    observe({
+      df <- exp_base()
+      updateSelectInput(session, "exp_contrat",
+                        choices = c("(Tous)", sort(unique(df$contrat))), selected="(Tous)")
+      updateSelectInput(session, "exp_etat",
+                        choices = c("(Tous)", sort(unique(df$etat_civil))), selected="(Tous)")
+      if ("age" %in% names(df)) {
+        rg <- range(df$age, na.rm = TRUE)
+        if (all(is.finite(rg))) updateSliderInput(session, "exp_age",
+                                                  min=floor(rg[1]), max=ceiling(rg[2]), value=c(floor(rg[1]), ceiling(rg[2])))
+      }
+    })
+    
+    # Réinitialiser
+    observeEvent(input$exp_reset, {
+      updateSelectInput(session, "exp_contrat", selected="(Tous)")
+      updateSelectInput(session, "exp_sexe",    selected="(Tous)")
+      updateSelectInput(session, "exp_etat",    selected="(Tous)")
+    })
+    
+    # Données filtrées
+    exp_df <- reactive({
+      df <- exp_base()
+      if ("age" %in% names(df)) df <- df |> filter(age >= input$exp_age[1], age <= input$exp_age[2])
+      if (input$exp_contrat != "(Tous)") df <- df |> filter(contrat == input$exp_contrat)
+      if (input$exp_sexe    != "(Tous)") df <- df |> filter(sexe    == input$exp_sexe)
+      if (input$exp_etat    != "(Tous)") df <- df |> filter(etat_civil == input$exp_etat)
+      df
+    })
+    
+    # KPI
+    output$exp_n <- renderText({
+      format(n_distinct(exp_df()$id_salarie), big.mark = " ", scientific = FALSE)
+    })
+    
+    
+    # Donut Genre
+    output$exp_pie_gender <- renderPlotly({
+      df <- exp_df()
+      validate(need(nrow(df) > 0, "Aucune donnée"))
+      tab <- df |>
+        mutate(genre = dplyr::recode(sexe, H="Hommes", F="Femmes", .default="Inconnu")) |>
+        count(genre, name="n") |>
+        arrange(desc(n))
+      plot_ly(tab, labels=~genre, values=~n, type="pie", hole=0.6,
+              textinfo="label+percent", hovertemplate="%{label} : %{value}<extra></extra>") |>
+        layout(showlegend=TRUE)
+    })
+    
+    # Barres horizontales : répartition par classes d'âge (en %)
+    output$exp_bar_age <- renderPlotly({
+      df <- exp_df()
+      validate(need(nrow(df) > 0, "Aucune donnée"))
+      brk <- c(-Inf, 30, 40, 50, 60, Inf)
+      lab <- c("< 30","30–39","40–49","50–59","60+")
+      tab <- df |>
+        mutate(cl_age = cut(age, breaks = brk, labels = lab, right = FALSE)) |>
+        count(cl_age, name="n") |>
+        mutate(pct = 100 * n / sum(n)) |>
+        tidyr::drop_na(cl_age)
+      plot_ly(tab, x = ~pct, y = ~cl_age, type = "bar", orientation = "h",
+              hovertemplate="%{y} : %{x:.1f} %<extra></extra>") |>
+        layout(xaxis=list(title="%"), yaxis=list(title=""))
+    })
+    
+    # Salaire moyen par dimension choisie
+    output$exp_bar_salary <- renderPlotly({
+      df <- exp_df()
+      validate(need(nrow(df) > 0, "Aucune donnée"))
+      by <- switch(input$exp_by,
+                   "Type de contrat" = "contrat",
+                   "État civil"      = "etat_civil",
+                   "Sexe"            = "sexe")
+      validate(need(by %in% names(df), "Dimension invalide"))
+      tab <- df |>
+        filter(!is.na(salaire)) |>
+        group_by(.data[[by]]) |>
+        summarise(Salaire_moyen = mean(salaire, na.rm = TRUE), .groups="drop") |>
+        arrange(desc(Salaire_moyen)) |>
+        rename(Groupe = 1)
+      plot_ly(tab, x=~Salaire_moyen, y=~Groupe, type="bar", orientation="h",
+              hovertemplate="%{y} : %{x:.0f} €<extra></extra>") |>
+        layout(xaxis=list(title="€"), yaxis=list(title=""))
+    })
+    
+    
 }
