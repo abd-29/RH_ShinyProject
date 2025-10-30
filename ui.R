@@ -155,9 +155,9 @@ ui <- navbarPage(
                 # Ligne titre + icône
                 div(
                   style = "display:flex; align-items:center; gap:6px;",
-                  tags$img(src = "salaire_icone.png",   # ajoute une icône dans www/
+                  tags$img(src = "salaire_icone.png",   
                            style = "height:20px;"),
-                  textOutput("label_salaire")           # libellé dynamique : médian ou moyen
+                  textOutput("label_salaire")           
                 ),
                 
                 # Chiffre en gras et grand
@@ -166,9 +166,9 @@ ui <- navbarPage(
                   textOutput("indicateur_salaire")
                 ),
                 
-                # Bouton switch, placé plus bas
+                # Bouton switch
                 div(
-                  style="margin-top:20px; display:flex; justify-content:flex-end;",  # espace au-dessus
+                  style="margin-top:20px; display:flex; justify-content:flex-end;",  # espace au dessus
                   materialSwitch(
                     inputId = "show_mean",
                     value = FALSE,     # FALSE = médian par défaut
@@ -224,7 +224,7 @@ ui <- navbarPage(
             )
           ),
           
-          # vide pour le moment
+          
           fluidRow(
             column(
               12
@@ -235,14 +235,13 @@ ui <- navbarPage(
     )
   ),
   
-  # Creation des autres onglets mais vide pour le moment
   # Onglet Explorer
   
   tabPanel(
     "Explorer",
     fluidPage(
       tags$head(tags$style(HTML("
-  :root{ --ink:#0b1222; }                 /* encore plus foncé */
+  :root{ --ink:#0b1222; }                 
   .card h4{ 
     color:var(--ink) !important; 
     font-weight:900; 
@@ -313,7 +312,7 @@ ui <- navbarPage(
                           )
                  ),
                  
-                 # Onglet 2 : Salaire moyen par ...
+                 # Salaire moyen par ...
                  tabPanel("Rémunérations",
                           div(class="card",
                               div(style="display:flex;justify-content:space-between;align-items:center;gap:10px",
@@ -326,13 +325,28 @@ ui <- navbarPage(
                           )
                  ),
                  
-                 # Onglet 3 : vide pour le moment
+                 # Tests statistiques
                  tabPanel("À venir",
-                          div(class="card",
-                              h4("Contenu à venir"),
-                              p("Cet onglet sera complété ultérieurement.")
-                          )
+                          h4("Test statistique : salaire ~ critère"),
+                          
+                          fluidRow(
+                            column(6,
+                                   selectInput("exp_test_by", "Critère",
+                                               choices = c("Sexe", "Type de contrat", "État civil", "Âge"),
+                                               selected = "Sexe")
+                            ),
+                            column(6,
+                                   actionButton("exp_run_test", "Lancer le test", class = "btn btn-primary")
+                            )
+                          ),
+                          
+                          br(),
+                          textOutput("exp_test_summary"),
+                          br(),
+                          plotlyOutput("exp_test_box", height = 320),
+                          tableOutput("exp_test_table")
                  )
+                 
                )
         )
       )

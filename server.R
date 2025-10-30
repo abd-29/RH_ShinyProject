@@ -296,4 +296,123 @@ server <- function(input, output, session)
     })
     
     
+    # ====================== TESTS STATISTIQUES (onglet "À venir") ======================
+    
+    exp_test_var <- reactive({
+      switch(input$exp_test_by,
+             "Sexe"            = "sexe",
+             "Type de contrat" = "contrat",
+             "État civil"      = "etat_civil",
+             "Âge"             = "age",
+             NULL)
+    })
+    
+    # Lancer le calcul que quand on clique
+    exp_test_res <- eventReactive(input$exp_run_test, {
+      df <- exp_df()
+      v  <- exp_test_var()
+      validate(need(!is.null(v), "Choisisir un critère."),
+               need(nrow(df) > 4, "Pas assez de données"))
+      
+      # Correlation age et salaire
+      if (v == "age") {
+        df2 <- df |> dplyr::select(age, salaire) |> tidyr::drop_na()
+        validate(need(nrow(df2) > 4, "Trop peu d’observations pour corrélation."))
+        ct <- suppressWarnings(cor.test(df2$age, df2$salaire, method = "spearman"))
+        list(
+          kind = "spearman",
+          p    = unname(ct$p.value),
+          est  = unname(ct$estimate),
+          var  = v,
+          table = NULL,                 
+          data  = df2
+        )
+      } else {
+        # Variable catégorielle -> t-test (2 groupes) ou Kruskal (≥3)
+        df2 <- df |> dplyr::select(salaire, !!v) |> tidyr::drop_na()
+        df2[[v]] <- droplevels(as.factor(df2[[v]]))
+        k <- nlevels(df2[[v]])
+        validate(need(k >= 2, "Un seul groupe présent → test impossible."))
+        
+        if (k == 2) {
+          # Welch t-test
+          tmp <- setNames(df2, c("salaire", "groupe"))
+          tt  <- try(suppressWarnings(t.test(salaire ~ groupe, data = tmp, var.equal = FALSE)), silent = TRUE)
+          validate(need(!inherits(tt, "try-error"), "Test impossible (effectifs/variances)."))
+          pval <- unname(tt$p.value)
+          # petit résumé par groupe
+          tab <- tmp |>
+            dplyr::group_by(groupe) |>
+            dplyr::summarise(n = dplyr::n(),
+                             mean = mean(salaire), median = median(salaire), sd = sd(salaire),
+                             .groups = "drop")
+          list(kind = "welch", p = pval, var = v, table = tab, data = tmp)
+        } else {
+          # Kruskal–Wallis
+          tmp <- setNames(df2, c("salaire", "groupe"))
+          kw  <- try(suppressWarnings(kruskal.test(salaire ~ groupe, data = tmp)), silent = TRUE)
+          validate(need(!inherits(kw, "try-error"), "Test impossible (effectifs)."))
+          pval <- unname(kw$p.value)
+          tab <- tmp |>
+            dplyr::group_by(groupe) |>
+            dplyr::summarise(n = dplyr::n(),
+                             mean = mean(salaire), median = median(salaire), sd = sd(salaire),
+                             .groups = "drop") |>
+            dplyr::arrange(dplyr::desc(median))
+          list(kind = "kruskal", p = pval, var = v, table = tab, data = tmp)
+        }
+      }
+    }, ignoreInit = TRUE)
+    
+    # Phrase de synthèse
+    output$exp_test_summary <- renderText({
+      req(exp_test_res())
+      r <- exp_test_res()
+      alpha <- 0.05
+      sig <- if (is.finite(r$p) && r$p < alpha) "différence significative" else "pas de différence significative"
+      
+      if (r$kind == "spearman") {
+        sprintf("Corrélation Spearman âge–salaire : rho = %.2f, p = %.4f → %s (α = 0,05).",
+                r$est, r$p, sig)
+      } else if (r$kind == "welch") {
+        sprintf("Welch t-test (%s) : p = %.4f → %s des salaires entre 2 groupes (α = 0,05).",
+                r$var, r$p, sig)
+      } else {
+        sprintf("Kruskal–Wallis (%s) : p = %.4f → %s des salaires entre groupes (α = 0,05).",
+                r$var, r$p, sig)
+      }
+    })
+    
+    # Graphique par groupe
+    output$exp_test_box <- renderPlotly({
+      req(exp_test_res())
+      r <- exp_test_res()
+      
+      if (r$kind == "spearman") {
+        plot_ly(r$data, x = ~age, y = ~salaire, type = "scatter", mode = "markers",
+                hovertemplate = "Âge %{x}<br>Salaire %{y:.0f} €<extra></extra>") |>
+          layout(xaxis = list(title = "Âge"), yaxis = list(title = "Salaire (€)"))
+      } else {
+        plot_ly(type = "box") |>
+          add_trace(data = r$data, x = ~groupe, y = ~salaire, boxpoints = "outliers",
+                    hovertemplate = "%{x}<br>Salaire %{y:.0f} €<extra></extra>") |>
+          layout(xaxis = list(title = ""), yaxis = list(title = "Salaire (€)"))
+      }
+    })
+    
+    output$exp_test_table <- renderTable({
+      req(exp_test_res())
+      r <- exp_test_res()
+      if (!is.null(r$table)) {
+        # formatage léger
+        d <- r$table
+        d$mean   <- round(d$mean, 0)
+        d$median <- round(d$median, 0)
+        d$sd     <- round(d$sd, 0)
+        names(d) <- c("Groupe", "n", "Moyenne €", "Médiane €", "SD €")
+        d
+      }
+    }, striped = TRUE, bordered = TRUE)
+    
+    
 }
