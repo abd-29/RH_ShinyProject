@@ -250,7 +250,6 @@ ui <- navbarPage(
     margin:0 0 8px;
   }
 "))),
-      
       tags$head(tags$style(HTML("
   .page-title-wrap{ margin:0 0 12px; }
   .page-title{ margin:0; color:var(--ink); font-weight:800; }
@@ -270,11 +269,8 @@ ui <- navbarPage(
   }
   /* Option : encore moins d'espace entre les cartes
   .card{ margin-bottom:14px; }
-  
   */
 "))),
-      
-      
       
       div(class = "page-title-wrap", h2("Explorer", class = "page-title")),
       fluidRow(
@@ -289,42 +285,60 @@ ui <- navbarPage(
                    actionLink("exp_reset", "Réinitialiser")
                )
         ),
+        
         # ------------------ CONTENU (droite) ------------------
         column(9,
-               # KPI total salariés
-               div(class="card kpi",
-                   h3("Total salariés"),
-                   div(class="val", textOutput("exp_n"))
-               ),
-               # Ligne 1 : Genre / Âges
-               fluidRow(
-                 column(6,
-                        div(class="card",
-                            h4("Genre"),
-                            plotlyOutput("exp_pie_gender", height = 260)
-                        )
+               tabsetPanel(
+                 id = "exp_tabs", type = "tabs",
+                 
+                 # Onglet 1 : KPI + Genre + Répartition des âges
+                 tabPanel("Vue d’ensemble",
+                          div(class="card kpi",
+                              h3("Total salariés"),
+                              div(class="val", textOutput("exp_n"))
+                          ),
+                          fluidRow(
+                            column(6,
+                                   div(class="card",
+                                       h4("Genre"),
+                                       plotlyOutput("exp_pie_gender", height = 260)
+                                   )
+                            ),
+                            column(6,
+                                   div(class="card",
+                                       h4("Répartition des âges"),
+                                       plotlyOutput("exp_bar_age", height = 260)
+                                   )
+                            )
+                          )
                  ),
-                 column(6,
-                        div(class="card",
-                            h4("Répartition des âges"),
-                            plotlyOutput("exp_bar_age", height = 260)
-                        )
+                 
+                 # Onglet 2 : Salaire moyen par ...
+                 tabPanel("Rémunérations",
+                          div(class="card",
+                              div(style="display:flex;justify-content:space-between;align-items:center;gap:10px",
+                                  h4("Salaire moyen par"),
+                                  selectInput("exp_by", NULL,
+                                              choices = c("Type de contrat","État civil","Sexe"),
+                                              width = "220px")
+                              ),
+                              plotlyOutput("exp_bar_salary", height = 420)
+                          )
+                 ),
+                 
+                 # Onglet 3 : vide pour le moment
+                 tabPanel("À venir",
+                          div(class="card",
+                              h4("Contenu à venir"),
+                              p("Cet onglet sera complété ultérieurement.")
+                          )
                  )
-               ),
-               # Ligne 2 : Salaire moyen par ...
-               div(class="card",
-                   div(style="display:flex;justify-content:space-between;align-items:center;gap:10px",
-                       h4("Salaire moyen par"),
-                       selectInput("exp_by", NULL,
-                                   choices = c("Type de contrat","État civil","Sexe"),
-                                   width = "220px")
-                   ),
-                   plotlyOutput("exp_bar_salary", height = 420)
                )
         )
       )
     )
   )
+  
   ,
   
   
