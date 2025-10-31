@@ -9,8 +9,6 @@ L’application permet :
 - de visualiser les répartitions à l’aide de graphiques interactifs ;
 - d’exporter facilement les données filtrées au format CSV.
 
-> Le projet évoluera prochainement avec l’ajout de la page **“Explorer”**, dédiée à l’analyse interactive détaillée des données.
-
 ---
 
 ## Structure du projet
@@ -48,6 +46,22 @@ Un **nettoyage des données** est effectué dans `global.R` :
   - Diagramme circulaire de la répartition des contrats.
 - Design sobre et réactif via `bslib` et `plotly`.
 
+### Onglet **Explorer**
+- **Filtres** : type de contrat, sexe, état civil, tranche d’âge + bouton *Réinitialiser*.  
+- **Contenu à droite en 3 sous-onglets** :
+  1. **Vue d’ensemble**  
+     - Bloc **Total salariés**,  
+     - **Genre** (camembert H/F),  
+     - **Répartition des âges** (barres par classes).
+  2. **Rémunérations**  
+     - **Salaire moyen par** *Type de contrat* / *État civil* / *Sexe* (barres horizontales).
+  3. **Tests statistiques**  
+     - Sélecteur de **critère** (*Sexe*, *Type de contrat*, *État civil*, *Âge*),  
+     - Bouton **Lancer le test**,  
+     - **Résumé** (p-value + conclusion significative ou non avec α = 0,05),  
+     - **Graphique** (boxplot par groupe ou nuage âge–salaire),  
+     - **Table** (n, moyenne, médiane, écart-type par groupe).
+       
 ### Onglet **Exporter les données**
 - Filtres sur :
   - âge, sexe, état civil, nombre d’enfants, contrat, salaire minimum, durée hebdomadaire, etc.  
@@ -71,7 +85,9 @@ Un **nettoyage des données** est effectué dans `global.R` :
 - **tidyverse** pour le traitement des données (`dplyr`, `readxl`, etc.)  
 - **plotly** pour les graphiques interactifs  
 - **bslib** pour la mise en forme et le thème visuel  
-- **shinyWidgets** pour les éléments d’interface modernes  
+- **shinyWidgets** pour les éléments d’interface modernes
+- **shinyapps.io** pour l'hébergement du site
+- **github actions** pour le déploiement continu  
 
 ---
 
