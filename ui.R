@@ -36,7 +36,7 @@ ui <- navbarPage(
     fluidPage(
       titlePanel("Analyse de données des Salariés"),
       
-      # ================ GAUCHE (textes + indicateurs) et à DROITE (graphiques) =======
+      # ================ GAUCHE (textes et indicateurs) et à DROITE (graphiques) =======
       fluidRow(
         
         # ============ Colonne gauche =================
@@ -132,7 +132,7 @@ ui <- navbarPage(
                     style = "padding:12px; margin-bottom:3px; min-height:90px;", 
                     div(
                       style = "display:flex; align-items:center; gap:6px;",
-                      tags$img(src = "contrat_icone.png",   # mets une icône dans www/
+                      tags$img(src = "contrat_icone.png",
                                style = "height:20px;"),
                       "Contrats"
                     ),
@@ -160,7 +160,7 @@ ui <- navbarPage(
                   textOutput("label_salaire")           
                 ),
                 
-                # Chiffre en gras et grand
+                
                 div(
                   style="font-size:1.4em; font-weight:bold; margin-left:30px; margin-top:10px;",
                   textOutput("indicateur_salaire")
@@ -168,10 +168,10 @@ ui <- navbarPage(
                 
                 # Bouton switch
                 div(
-                  style="margin-top:20px; display:flex; justify-content:flex-end;",  # espace au dessus
+                  style="margin-top:20px; display:flex; justify-content:flex-end;",
                   materialSwitch(
                     inputId = "show_mean",
-                    value = FALSE,     # FALSE = médian par défaut
+                    value = FALSE,     
                     status = "primary"
                   )
                 )
@@ -326,7 +326,7 @@ ui <- navbarPage(
                  ),
                  
                  # Tests statistiques
-                 tabPanel("À venir",
+                 tabPanel("Tests",
                           h4("Test statistique : salaire ~ critère"),
                           
                           fluidRow(
@@ -515,7 +515,7 @@ ui <- navbarPage(
                         tags$p(class="author-name","DIOP Daouda"),
                         tags$p(class="author-role","Master en modélisation statistique"),
                         tags$a(class="btn-ln",
-                               href="https://www.linkedin.com/",   
+                               href="https://www.linkedin.com/in/daouda-diop",   
                                target="_blank",
                                HTML('<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.84v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.09V23h-4v-6.64c0-1.58-.03-3.61-2.2-3.61-2.2 0-2.54 1.72-2.54 3.5V23h-4V8z"/></svg>'),
                                "LinkedIn")
