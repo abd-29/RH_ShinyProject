@@ -515,7 +515,7 @@ ui <- navbarPage(
                         tags$p(class="author-name","DIOP Daouda"),
                         tags$p(class="author-role","Master en modélisation statistique"),
                         tags$a(class="btn-ln",
-                               href="https://www.linkedin.com/",   
+                               href="https://www.linkedin.com/in/daouda-diop",   
                                target="_blank",
                                HTML('<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.84v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.09V23h-4v-6.64c0-1.58-.03-3.61-2.2-3.61-2.2 0-2.54 1.72-2.54 3.5V23h-4V8z"/></svg>'),
                                "LinkedIn")
