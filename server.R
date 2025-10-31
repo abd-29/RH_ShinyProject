@@ -160,7 +160,7 @@ server <- function(input, output, session)
     
     # Aperçu (10 lignes si la case est cochée)
     output$table_filtre_preview <- renderTable({
-      df <- if (isTRUE(input$preview10)) head(donnees_filtrees_all(), 10) else donnees_filtrees_all()
+      df <- if (isTRUE(input$preview10)) head(donnees_filtrees(), 10) else donnees_filtrees()
       
       # fonction d'affichage
       to_display <- function(x) {
