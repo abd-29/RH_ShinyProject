@@ -2,7 +2,7 @@
 ################### BACK-END ##############################
 #########################################################
 
-# Define server logic 
+# La logique server
 server <- function(input, output, session) 
   {
   
@@ -12,7 +12,7 @@ server <- function(input, output, session)
   ############################################################################
   # ============== CALCUL INDICATEUR PAGE ACCUEIL ==============
   
-    # Nombre de salarie
+    # Nombre de salarié
     output$indicateur_salaries <- renderText({
       n_distinct(data$id_salarie)
     })
@@ -135,7 +135,7 @@ server <- function(input, output, session)
   
     
     #Application des filtres 
-    donnees_filtrees_all <- reactive({
+    donnees_filtrees <- reactive({
       df <- data
       
       if ("salaire" %in% names(df)) df <- df[df$salaire >= input$filtre_salaire_min | is.na(df$salaire), , drop = FALSE]
@@ -158,11 +158,11 @@ server <- function(input, output, session)
       df
     })
     
-    # 3) Aperçu (10 lignes si case cochée)
+    # Aperçu (10 lignes si la case est cochée)
     output$table_filtre_preview <- renderTable({
       df <- if (isTRUE(input$preview10)) head(donnees_filtrees_all(), 10) else donnees_filtrees_all()
       
-      # petite fonction d'affichage
+      # fonction d'affichage
       to_display <- function(x) {
         if (is.numeric(x)) {
           ifelse(is.na(x), "Non renseigné",
@@ -172,14 +172,14 @@ server <- function(input, output, session)
         }
       }
       
-      # colonnes à nettoyer si elles existent
+      # colonnes à nettoyer
       cols <- intersect(c("enfants", "etat_civil", "salaire"), names(df))
       for (cl in cols) df[[cl]] <- to_display(df[[cl]])
       
       df
     }, striped = TRUE, bordered = TRUE)
     
-    # 4) Téléchargements CSV 
+    # Téléchargements CSV 
     output$dl_salaries_csv <- downloadHandler(
       filename = function() "RH_Salaries.csv",
       content  = function(file) write.csv2(Salaires, file, row.names = FALSE, fileEncoding = "UTF-8")
@@ -192,7 +192,7 @@ server <- function(input, output, session)
     
     output$dl_filtre_csv <- downloadHandler(
       filename = function() "Donnees_filtrees.csv",
-      content  = function(file) write.csv2(donnees_filtrees_all(), file, row.names = FALSE, fileEncoding = "UTF-8")
+      content  = function(file) write.csv2(donnees_filtrees(), file, row.names = FALSE, fileEncoding = "UTF-8")
     )
     
     # =========================== ONGLET EXPLORER ============================
@@ -209,7 +209,7 @@ server <- function(input, output, session)
       df
     })
     
-    # Choix dynamiques + bornes d'âge
+    # Choix dynamiques
     observe({
       df <- exp_base()
       updateSelectInput(session, "exp_contrat",
@@ -240,13 +240,13 @@ server <- function(input, output, session)
       df
     })
     
-    # KPI
+    
     output$exp_n <- renderText({
       format(n_distinct(exp_df()$id_salarie), big.mark = " ", scientific = FALSE)
     })
     
     
-    # Donut Genre
+    # Genre
     output$exp_pie_gender <- renderPlotly({
       df <- exp_df()
       validate(need(nrow(df) > 0, "Aucune donnée"))
@@ -259,7 +259,7 @@ server <- function(input, output, session)
         layout(showlegend=TRUE)
     })
     
-    # Barres horizontales : répartition par classes d'âge (en %)
+    # répartition par classes d'âge (en %)
     output$exp_bar_age <- renderPlotly({
       df <- exp_df()
       validate(need(nrow(df) > 0, "Aucune donnée"))
@@ -296,7 +296,7 @@ server <- function(input, output, session)
     })
     
     
-    # ====================== TESTS STATISTIQUES (onglet "À venir") ======================
+    # ====================== TESTS STATISTIQUES ======================
     
     exp_test_var <- reactive({
       switch(input$exp_test_by,
@@ -314,7 +314,7 @@ server <- function(input, output, session)
       validate(need(!is.null(v), "Choisisir un critère."),
                need(nrow(df) > 4, "Pas assez de données"))
       
-      # Correlation age et salaire
+      # Correlation entre age et salaire
       if (v == "age") {
         df2 <- df |> dplyr::select(age, salaire) |> tidyr::drop_na()
         validate(need(nrow(df2) > 4, "Trop peu d’observations pour corrélation."))
@@ -340,7 +340,7 @@ server <- function(input, output, session)
           tt  <- try(suppressWarnings(t.test(salaire ~ groupe, data = tmp, var.equal = FALSE)), silent = TRUE)
           validate(need(!inherits(tt, "try-error"), "Test impossible (effectifs/variances)."))
           pval <- unname(tt$p.value)
-          # petit résumé par groupe
+          
           tab <- tmp |>
             dplyr::group_by(groupe) |>
             dplyr::summarise(n = dplyr::n(),
@@ -364,7 +364,7 @@ server <- function(input, output, session)
       }
     }, ignoreInit = TRUE)
     
-    # Phrase de synthèse
+    # synthèse
     output$exp_test_summary <- renderText({
       req(exp_test_res())
       r <- exp_test_res()
@@ -404,7 +404,7 @@ server <- function(input, output, session)
       req(exp_test_res())
       r <- exp_test_res()
       if (!is.null(r$table)) {
-        # formatage léger
+        
         d <- r$table
         d$mean   <- round(d$mean, 0)
         d$median <- round(d$median, 0)

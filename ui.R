@@ -36,7 +36,7 @@ ui <- navbarPage(
     fluidPage(
       titlePanel("Analyse de données des Salariés"),
       
-      # ================ GAUCHE (textes + indicateurs) et à DROITE (graphiques) =======
+      # ================ GAUCHE (textes et indicateurs) et à DROITE (graphiques) =======
       fluidRow(
         
         # ============ Colonne gauche =================
@@ -132,7 +132,7 @@ ui <- navbarPage(
                     style = "padding:12px; margin-bottom:3px; min-height:90px;", 
                     div(
                       style = "display:flex; align-items:center; gap:6px;",
-                      tags$img(src = "contrat_icone.png",   # mets une icône dans www/
+                      tags$img(src = "contrat_icone.png",
                                style = "height:20px;"),
                       "Contrats"
                     ),
@@ -160,7 +160,7 @@ ui <- navbarPage(
                   textOutput("label_salaire")           
                 ),
                 
-                # Chiffre en gras et grand
+                
                 div(
                   style="font-size:1.4em; font-weight:bold; margin-left:30px; margin-top:10px;",
                   textOutput("indicateur_salaire")
@@ -168,10 +168,10 @@ ui <- navbarPage(
                 
                 # Bouton switch
                 div(
-                  style="margin-top:20px; display:flex; justify-content:flex-end;",  # espace au dessus
+                  style="margin-top:20px; display:flex; justify-content:flex-end;",
                   materialSwitch(
                     inputId = "show_mean",
-                    value = FALSE,     # FALSE = médian par défaut
+                    value = FALSE,     
                     status = "primary"
                   )
                 )
@@ -326,7 +326,7 @@ ui <- navbarPage(
                  ),
                  
                  # Tests statistiques
-                 tabPanel("À venir",
+                 tabPanel("Tests",
                           h4("Test statistique : salaire ~ critère"),
                           
                           fluidRow(
