@@ -4,7 +4,6 @@
 
 ############# LIBRARY IMPORTATION #####################
 library(shiny)
-library(readr)
 library(readxl)
 library(dplyr)
 library(ggplot2)

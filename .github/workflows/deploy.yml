@@ -24,14 +24,12 @@ jobs:
             any::rsconnect
             any::shiny
             any::readxl
-            any::readr
             any::tidyr
             any::dplyr
             any::plotly
             any::shinyWidgets
             any::bslib
             any::lubridate
-            any::progress
             any::cpp11
 
       - name: Deploy to shinyapps.io
