@@ -40,12 +40,13 @@ jobs:
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
           SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
         run: |
-          R -e "rsconnect::setAccountInfo(
+          R -e "options(repos = c(CRAN = 'https://cran.rstudio.com/'));
+               rsconnect::setAccountInfo(
                  name   = Sys.getenv('SHINYAPPS_NAME'),
                  token  = Sys.getenv('SHINYAPPS_TOKEN'),
                  secret = Sys.getenv('SHINYAPPS_SECRET')
-               )"
-          R -e "rsconnect::deployApp(
+               );
+               rsconnect::deployApp(
                  '.',
                  appName       = 'RH-Pay-Insights',
                  logLevel      = 'normal',
