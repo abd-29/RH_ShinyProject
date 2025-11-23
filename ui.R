@@ -351,9 +351,117 @@ ui <- navbarPage(
         )
       )
     )
-  )
+  ),
   
-  ,
+  #############################################################################
+  ##                        PAGE SALARIE                                     ##
+  #############################################################################
+  
+  tabPanel(
+    "Salarié",
+    fluidPage(
+      
+      tags$head(
+        tags$style(HTML("
+          .fiche-wrap { max-width: 980px; margin: 0 auto; padding: 20px 8px 40px; }
+          .fiche-title { margin: 0 0 16px; font-weight: 800; }
+          
+          .fiche-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 18px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, .08);
+            margin-bottom: 18px;
+          }
+          .fiche-avatar img {
+            width: 90px;
+            height: 90px;
+            border-radius: 999px;
+            object-fit: cover;
+            border: 3px solid #e5e7eb;
+          }
+          .fiche-header-text h3 {
+            margin: 0 0 4px;
+            font-size: 1.3rem;
+            font-weight: 800;
+          }
+          .fiche-header-text p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 0.95rem;
+          }
+          
+          .fiche-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+          }
+          .fiche-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, .06);
+            padding: 10px 14px;
+          }
+          .fiche-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: #9ca3af;
+            margin-bottom: 2px;
+          }
+          .fiche-value {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #111827;
+          }
+          .fiche-value.muted {
+            color: #9ca3af;
+            font-style: italic;
+          }
+        "))
+      ),
+      
+      div(class = "fiche-wrap",
+          
+          h2("Fiche salarié", class = "fiche-title"),
+          
+          fluidRow(
+            # sélection
+            column(
+              width = 4,
+              div(class = "card",
+                  h4("Sélection"),
+                  
+                  selectInput(
+                    "fiche_id_select",
+                    "Choisir un identifiant",
+                    choices  = sort(unique(data$id_salarie)),
+                    selected = sort(unique(data$id_salarie))[1]
+                  ),
+                  
+                  textInput(
+                    "fiche_id_text",
+                    "Saisir un identifiant",
+                    placeholder = "Ex : 16241218-7045"
+                  ),
+                  
+                  helpText("Si l'identifiant saisi n'existe pas, aucune fiche ne sera affichée.")
+              )
+            ),
+            
+            #fiche détaillée
+            column(
+              width = 8,
+              uiOutput("fiche_salarie_ui")
+            )
+          )
+      )
+    )
+  ),
+  
   
   
   #############################################################################
@@ -395,7 +503,7 @@ ui <- navbarPage(
                       wellPanel(
                         strong("RH_Salaries.csv"),
                         p("Table des salariés (une ligne par salarié).",
-                          "Colonnes principales : id_salarié, Sexe, Année_naissance, Etat Civil, Enfants, Salaire, Age, Durée hebdo (si présente)."),
+                          "avec comme colonnes principales : id_salarié, Sexe, Année_naissance, Etat Civil, Enfants, Salaire, Age, Durée hebdo."),
                         downloadButton("dl_salaries_csv", "Télécharger RH_Salaries.csv")
                       ),
                       
@@ -403,15 +511,14 @@ ui <- navbarPage(
                       wellPanel(
                         strong("RH_Contrats.csv"),
                         p("Table des contrats associés aux salariés.",
-                          "Colonnes principales : id_salarié, Contrat, autres informations disponibles selon le fichier."),
+                          "avec comme colonnes principales : id_salarié, Contrat, autres informations disponibles selon le fichier."),
                         downloadButton("dl_contrats_csv", "Télécharger RH_Contrats.csv")
                       ),
                       
                       # --- Fichier filtré ---
                       wellPanel(
                         strong("Donnees_filtrees.csv"),
-                        p("Table résultant de vos choix de filtres (âge, sexe, situation, salaire minimum, etc.).",
-                          "Utile pour partager exactement la sélection affichée dans l’onglet « Tableau »."),
+                        p("Table résultant de vos choix de filtres (âge, sexe, situation, salaire minimum, etc.)."),
                         downloadButton("dl_filtre_csv", "Télécharger Donnees_filtrees.csv")
                       )
                     )
@@ -420,8 +527,12 @@ ui <- navbarPage(
         )
       )
     )
-  )
-  ,
+  ),
+  
+  #############################################################################
+  ##                        PAGE A PROPOS                                    ##
+  #############################################################################
+  
   tabPanel(
     "À propos",
     fluidPage(
@@ -462,13 +573,12 @@ ui <- navbarPage(
               h1("À propos"),
           ),
           
-          # Ce que propose cette page
           div(class="card",
               h2("Ce que propose cette page"),
               tags$ul(class="list",
                       tags$li(HTML("<strong>Contexte & objectifs :</strong> Data Visualisation sur les données RH_salaries et RH_contrats.")),
                       tags$li(HTML("<strong>Fonctionnalités clés :</strong> indicateurs d’accueil, histogrammes interactifs, filtres avancés et exports CSV.")),
-                      tags$li(HTML("<strong>Portée & limites :</strong> données fictives à visée pédagogique ; les résultats ne constituent pas une politique RH.")),
+                      tags$li(HTML("<strong>Portée & limites :</strong> données fictives à visée pédagogique et les résultats ne constituent pas une politique RH.")),
               )
           ),
           
